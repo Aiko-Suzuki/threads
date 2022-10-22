@@ -83,7 +83,6 @@ class Threads {
 			}
 		})();`,
 		).replace(/ (\/\/.*?)\n/gms, "").replace(/\s{2,}|\r\n|\n|\r/gms, "");
-		console.log(code);
 
 		const blob = new Blob([code], { type: "application/typescript" });
 		const worker = new Worker(URL.createObjectURL(blob), {
