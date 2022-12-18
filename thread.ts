@@ -70,7 +70,7 @@ class Threads {
 			});
 		});
 
-		let code = thread.toString().replace(
+		let code = thread.toString().replace("%name%",name).replace(
 			/(?:async )function Thread(.*)\(\) {(.*)}$/gms,
 			`(async()=>{$2;
 			if (Thread) {
