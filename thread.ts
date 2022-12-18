@@ -55,7 +55,7 @@ class Threads {
 	}
 
 	public RegisterThread(name: string, thread: any) {
-		if (self.postMessage) return;
+		if (typeof self.postMessage == "function") return;
 		// check if thread is already registered
 		if (this.threads.has(name)) return;
 		// check if thread is a function
@@ -71,7 +71,7 @@ class Threads {
 		});
 
 		let code = thread.toString().replace(
-			/(?:async )function (.*)\(\) {(.*)}$/gms,
+			/(?:async )function Thread(.*)\(\) {(.*)}$/gms,
 			`(async()=>{$2;
 			if (Thread) {
 				Thread.SendTo("main",{
@@ -82,12 +82,11 @@ class Threads {
 				});
 			}
 		})();`,
-		).replace(/ (\/\/.*?)\n/gms, "").replace(/\s{2,}|\r\n|\n|\r/gms, "");
+		)
 
 		const blob = new Blob([code], { type: "application/typescript" });
 		const worker = new Worker(URL.createObjectURL(blob), {
 			type: "module",
-			deno: true,
 		});
 
 		worker.onmessage = async (e: any) => {
